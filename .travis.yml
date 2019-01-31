@@ -70,8 +70,8 @@ before_install:
 - if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]]; then echo
   "Installing Missing Deps ANTsR" ; install_missing_remote_deps ${ants_user}/ANTsR
   ; gh_binary_install_passive ${ants_user}/ANTsR ; fi
-- if [[ "${PACKAGE_NAME}" == "ANTsR" ]]; then export _R_CHECK_FORCE_SUGGESTS_=0 ;
-  fi
+- if [[ "${PACKAGE_NAME}" == "ANTsR" ]]; then export _R_CHECK_FORCE_SUGGESTS_=false
+  ; fi
 - cat DESCRIPTION
 - install_remotes_no_dep
 - cat DESCRIPTION
@@ -112,7 +112,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: AkF9lstNiGWloNlvlczLe7qKdfoWBxTwwzCwBu8diZn26u0DwybJsH029bqGzlfhrMpgaiQe0QL2rOtJG3NWk2OYkEUxziA5duNY6Uzmg3zdNttpRM4BjfaxEBxosGO2bZQD79tQtudCGgkpHGUHpclkeHcwYj3zIxtYY+/bivf1X4YeSvRnm/rdzJiHwChu+BhmXoJx87x/NLs+wKiHNhOiLGvshTy4gliC9aJOI2hVE74PS31jSCOfLrdU+mlT++R15N22448yeJiCzhpmMVyePgUGR6B+ZMNa5JZz6+OVHb1uNues7KingQqMe3cYeg5cFchI570nCPX+9xlJDjE1dRKj9Vpgy2VUifen8hRO4OkKgOZm15HAgZp8UykJIfHNR5RZFHLxV6fzXaUn576e7DqREf7Asvr58AZFN9lcSWq85N+aKHRZqzoOwTlOUah9npZS6CIaByFm3HyX/33IynP5wRFxqe4HXoHuOdkmrGJm8sgl/QJKFxwdZLQGkJYCnOr6ykUc5dp0aYYbxroPP7SLQLiI7o+gXCmWs43p8VMfoW4fkYUhe1XHsh0FNn/v7JKvLTgru6mTEignYaIOulBOqbzEJwFsKMPvkj7kfAyNMJKrczGpH4TBQmaNc2DL2TxBGUFK9yAh7WqmyM1btZvSuP9MgrIKGgIXU8A=
+    secure: e+jwPUA15pgQ/Q8L7HJ4Jt5Z4SaZvsOA8Zrol5x+IDyjutIZZFh1oVztTauxG+4w/N92MwinYY9luIFJZ/rH/vw4m2sQn4nDv+3wn36Nz0/6TFOoah7pbbi+4FB9oUtLZ42tg7PKRXUID2hAVqOWgOBHnF9T2bqRE7mp3ozAZ9PZ6My+vUHcKNC9TraJ2pHWqPCIGADQMLMhQxOBsX97Hk+SCECd4qonUim7jn8q0pj1edyRl3rYZT/z2cW8WL5T3Nw6mwbRnYSkoRRZzbJ4F8KXEsyEmn26CyMWlisZSeXPhzLkNVveq1dVoMUIkdapP+IgU3aGPKrTYDnWtibgM5uWk+akywEX1LhHu6zEbUEKWHi20Z4vNbKLnDj5lTjxX3skGf9K+0xsflcNDnAVuVbEovy0m3x5urC/lTT/MsxKtz92xch7ftHGEt35swXKCtW9mf7nA9bGx3ULcjrpqmHJcU006ABstZSIqKbmgaF3Upacfws4lICGHLcGd6FfIovKDxi3vg2ZSw9fgLYqZ6GNUPMyxW2ek/6EXc6WZKNfnuvC0p7yh36P1eBQdBKlHKQbVKA5oGesSe3vftXeFx94wSL1crDXuHRqgHox4MmI3Tcz8kLmLG30LtqR2VrcB5uFNvJNh+d6WES6vxFtYhl41HPG+mjiMMdxidBRFV4=
 after_deploy:
 - if [[ "${PACKAGE_NAME}" != "ANTsR" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
   != "ANTsRCore" ]]; then if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then
