@@ -16,16 +16,12 @@ Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.0), ANTsR
 Imports: ANTsRCore, graphics, lmPerm, Rcpp, stats, utils
-Suggests: 
-    nparcomp,
-    e1071,
-    covr,
-    testthat
+Suggests: nparcomp, e1071, covr, testthat
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes
 RoxygenNote: 6.1.0.9000
+biocViews:
 Repository: Neuroconductor
-Remotes:  
+Remotes: 
     neuroconductor/ANTsRCore@0792c428ac1df8856e0c48892e1090b915c87564,
     neuroconductor/ANTsR@a8614b2d79996a33933aa27f9f2d9452d8df5564
-biocViews: 
