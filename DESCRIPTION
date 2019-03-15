@@ -1,7 +1,7 @@
 Package: LESYMAP
 Title: Leions to Symptom Mapping in R
-Version: 0.0.0.9202
-Date: 2018-09-14
+Version: 0.0.0.9210
+Date: 2019-03-15
 Authors@R: person("Dorian", "Pustina",
         email='dorian.pustina@chdifoundation.org', role = c("aut",
         "cre"))
@@ -11,17 +11,21 @@ Description: LESYMAP maps the specific brain areas responsible for
         Brunner-Munzel, regression) and multivariate (sparse canonical
         corelations) tests are available. LESYMAP is built to run both
         real and simulated lesion-to-symptom mapping analyses.
-License: Apache License 2.0
+License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.0), ANTsR
 Imports: ANTsRCore, graphics, lmPerm, Rcpp, stats, utils
-Suggests: nparcomp, covr, testthat
+Suggests: 
+    nparcomp,
+    e1071,
+    covr,
+    testthat
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes
 RoxygenNote: 6.1.0.9000
-biocViews:
 Repository: Neuroconductor
-Remotes: 
-    neuroconductor/ANTsRCore@bc86d961f822fc6ca701ef704060ba2d82ee718c,
+Remotes:  
+    neuroconductor/ANTsRCore@0792c428ac1df8856e0c48892e1090b915c87564,
     neuroconductor/ANTsR@a8614b2d79996a33933aa27f9f2d9452d8df5564
+biocViews: 
