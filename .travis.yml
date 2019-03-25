@@ -112,7 +112,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: RSdupFsplSP/lxxLEXOxbkQ5aMmeT/jLjIloH5xKXsptoL0cnlyvrebwtS3KWES5Uqpw9Opn/W+HfZqwz1xnvjFgT7mkU6bLw2B4KYvOvZYjGNM0LSJsZy/uXoHUiOLIu8vlJvPqDNwQGLKuQSQoSQOyRYbaz3IE8FH5pJIZekDvdwyoXkbH6BFajdA+a92k6a10+kfi+t/Txvy6GgW/s5xW/iUqwXTn/NlEnbxkiGvWTyKDvX4Cf45CaLZFqf7Og9x8NdOy3mLIDz/6y7nmqf6E4MmEd7IvIcqT8mrzOJkprJiWKqE5EXIc5E330JCNJ7T/mjolyusYQy6TLTGgZcLKsKH56isKr6b/0bgGjFl1pAFXn1hkbfNCwKqviFn3gAleOi5AgjYB/qx1B1QsE/leprXHjccXLvZ77qtYipSASJcx7pIWgPYyA1chGTyqY/QgLWHpH6NiFdsjjJ0+w3iA0S98rEJSCGH8HZkFCSnIxlgI9kYixcox59Yrmzhhc536NYHJw0+WohpRfwn/ZeTUEkmGfdiQ83GUTX778iZhBnFX5Gm88lND0iUoDduQoGPm3/QjwrRixsr+62XzVMObBzhxH2ddqFrA5jizimmdaGPfqBw8+cQ7xjFIFA3P4bnfRq2vK7R4lyW0eAkyctuk0rlOXOkpdPlIZf3E4q4=
+    secure: VjYonncBMDbWPfv+BhyAlrjMlZqCU6w5PdxVhMZrvxEmMIV+MOVMNGDbQeWf9TPNgkAuIsibnn41P3Ltkuh4D4oAInoONpVP1YSna5ohE8hg+0rxSZSnzwpJpa93eJeek+3yELUvMZ+rckfr29Q2AYw9zr+Fn+yuse/FhLTqzDBFabGN6+WZTNWN1/sQ2TveSmcokyTMpizw8P3RntQ3o/uEHBzy/D6IkTHymryDniMH34/j/9KfiCgVo95FfiwS7XHfV7WKBbQb04yTf3qOa8PY8H85snjr/77EKPoWqVkY5RxV5O4otKL8rX7P6Zjhb0ynHvNoknWVY8/IGQapEqj5TFulrhzjUjf/LgQ/NRLDw5kcOmWFoqSRShVE7ixO4Y2hpKdq9AAFLwzNE1vAxCN8cW8XtUgV5RgZYKt4MJ7PsXGYiu8PjorOuZIXCYNytPF+OCCZw3pZedwOmDqai/sz+A5eXEaW9nmNDSErLfshZjwPgL+FdAp+LEjNnk4cPJHOMORIaS4Rnbne6ASA9jtFfOM9e9jooCF3veuY2noxkKOEz77GcXTuz+ibrZOxay+l6kdQNnPYEGFxWq0aOMxj8fSsmd3ldnSx1btpNyxcKOYy2WDJXJzjgkK1Vv2H9+2QZSy0iDSaOnSslHpSVn1Jv6z+g3hQHUqQ4BIEFtQ=
 after_deploy:
 - if [[ "${PACKAGE_NAME}" != "ANTsR" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
   != "ANTsRCore" ]]; then if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then
