@@ -1,5 +1,6 @@
-#' Sparse canonical correlations for symptom mapping.
+#' @title Sparse canonical correlations for symptom mapping
 #'
+#' @description
 #' Multivariate SCCAN adapted for lesion to symptom mapping purposes.
 #' By default an optimization routine is used to find the best
 #' \code{sparseness} value. If you specify sparseness manually, it
@@ -87,6 +88,10 @@
 #' using the optimal sparseness value
 #' \item\code{CVcorrelation.pval} - (if optimizeSparseness=TRUE) p-value
 #'  of the above correlation
+#'  \item\code{sccan.behavior.scaleval} - scaling value for behavior
+#'  \item\code{sccan.behavior.centerval} - center value for behavior
+#'  \item\code{sccan.lesmat.scaleval} - scaling value for lesion matrix
+#'  \item\code{sccan.lesmat.centerval} - center value for lesion matrix
 #' }
 #'
 #' @examples{
@@ -126,8 +131,10 @@ lsm_sccan <- function(lesmat, behavior, mask, showInfo=TRUE,
   cthresh = c(cthresh,0)
 
   # scale and center data
+  behavior.orig = behavior
   behavior = scale(behavior, scale=T, center=T)
   lesmat = scale(lesmat, scale=T, center=T)
+
   # prepare data
   inmats=list(lesmat,as.matrix(behavior))
   sccan.masks=c(mask,NA)
@@ -234,6 +241,20 @@ lsm_sccan <- function(lesmat, behavior, mask, showInfo=TRUE,
   output$rawWeights.img = makeImage(mask,sccan$eig1)
   output$sccan.eig2 = sccan$eig2
   output$sccan.ccasummary = sccan$ccasummary
+
+  # needed later to rescale for prediction purposes
+  output$sccan.behavior.scaleval = attr(behavior, 'scaled:scale')
+  output$sccan.behavior.centerval = attr(behavior, 'scaled:center')
+  output$sccan.lesmat.scaleval = attr(lesmat, 'scaled:scale')
+  output$sccan.lesmat.centerval = attr(lesmat, 'scaled:center')
+
+  # regression model to backproject to behavior original
+  predbehav = lesmat %*% t(sccan$eig1) %*% sccan$eig2
+  predbehav.raw = predbehav * output$sccan.behavior.scaleval + output$sccan.behavior.centerval
+  output$sccan.predictlm = lm(behavior.orig ~ predbehav.raw,
+                              data = data.frame(behavior.orig=behavior.orig,
+                                                predbehav.raw=predbehav.raw))
+
 
   if (optimizeSparseness) {
     output$optimalSparseness = sparse.optim$minimum
