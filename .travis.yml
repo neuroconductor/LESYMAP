@@ -32,6 +32,7 @@ env:
   - WARNINGS_ARE_ERRORS=1
   - PROJECT_NAME=neuroconductor
   - DISPLAY=:99.0
+  - R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
 before_install:
 - ulimit -n 2048
 - export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
@@ -43,6 +44,7 @@ before_install:
 - cat DESCRIPTION
 - start_xvfb ;
 - v8_install ;
+- dcmtk_install ;
 - export rver=`r_version`; echo $rver ;
 - export PACKAGE_NAME=`package_name`
 - export RCHECK_DIR=${PACKAGE_NAME}.Rcheck
@@ -59,16 +61,16 @@ before_install:
 - cmake --version
 - export ants_user=neuroconductor
 - echo "Installing Missing Deps ITKR"
-- install_missing_remote_deps ${ants_user}/ITKR
+- install_missing_remote_deps_all ${ants_user}/ITKR
 - gh_binary_install ${ants_user}/ITKR ;
 - if [[ "${PACKAGE_NAME}" == "ITKR" || "${PACKAGE_NAME}" == "ANTsRCore" || "${PACKAGE_NAME}"
   == "ANTsR" ]]; then export R_BUILD_ARGS="${R_BUILD_ARGS} --no-build-vignettes "
   ; fi
 - if [[ "${PACKAGE_NAME}" != "ITKR" ]]; then echo "Installing Missing Deps ANTsRCore"
-  ; install_missing_remote_deps ${ants_user}/ANTsRCore; gh_binary_install_passive
+  ; install_missing_remote_deps_all ${ants_user}/ANTsRCore; gh_binary_install_passive
   ${ants_user}/ANTsRCore ; fi
 - if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]]; then echo
-  "Installing Missing Deps ANTsR" ; install_missing_remote_deps ${ants_user}/ANTsR
+  "Installing Missing Deps ANTsR" ; install_missing_remote_deps_all ${ants_user}/ANTsR
   ; gh_binary_install_passive ${ants_user}/ANTsR ; fi
 - if [[ "${PACKAGE_NAME}" == "ANTsR" ]]; then export _R_CHECK_FORCE_SUGGESTS_=false
   ; fi
@@ -112,7 +114,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: VjYonncBMDbWPfv+BhyAlrjMlZqCU6w5PdxVhMZrvxEmMIV+MOVMNGDbQeWf9TPNgkAuIsibnn41P3Ltkuh4D4oAInoONpVP1YSna5ohE8hg+0rxSZSnzwpJpa93eJeek+3yELUvMZ+rckfr29Q2AYw9zr+Fn+yuse/FhLTqzDBFabGN6+WZTNWN1/sQ2TveSmcokyTMpizw8P3RntQ3o/uEHBzy/D6IkTHymryDniMH34/j/9KfiCgVo95FfiwS7XHfV7WKBbQb04yTf3qOa8PY8H85snjr/77EKPoWqVkY5RxV5O4otKL8rX7P6Zjhb0ynHvNoknWVY8/IGQapEqj5TFulrhzjUjf/LgQ/NRLDw5kcOmWFoqSRShVE7ixO4Y2hpKdq9AAFLwzNE1vAxCN8cW8XtUgV5RgZYKt4MJ7PsXGYiu8PjorOuZIXCYNytPF+OCCZw3pZedwOmDqai/sz+A5eXEaW9nmNDSErLfshZjwPgL+FdAp+LEjNnk4cPJHOMORIaS4Rnbne6ASA9jtFfOM9e9jooCF3veuY2noxkKOEz77GcXTuz+ibrZOxay+l6kdQNnPYEGFxWq0aOMxj8fSsmd3ldnSx1btpNyxcKOYy2WDJXJzjgkK1Vv2H9+2QZSy0iDSaOnSslHpSVn1Jv6z+g3hQHUqQ4BIEFtQ=
+    secure: sHItN6FzRHFEo16CrIriYXCJK6nZr8Qd06kXXKIjx1XHC0gAF7kgvofkJKxCsqbeWHh2XQ14/uFRph64VblNzH4FDAPWEbCwY14GcQqXRjI//bam955rFDKmMoAuw64klH+vt7ftkq4zyYj6RFWitVBpe0Ht9SGoaD3vBOwsZ9eVbIfiUr35bUpA4keOOzIM2YJkV5ZedrpekyRFk3ryQ8O3FN4jIILrRAf83oOQr0vGO9lRLPxTAaicaJgHwSkVf4gteTVduMEtzxAraGUV89Eeqb2bCthKiQFwdcYyBotuIeVwPYQyggOCURHY03FBU9/2yF+/ccmUPHwL4Gl3fgWMHEWGRDO4Eeus+IrxjaENlEZp0V/xGvwMPdW7D5wU0hYAYd13Q5RnVObYcAuJUtaOXKRH21YHEGZTkaDdujwP9ts4etg122aIUs0D8CrJ/ztmbsry1lJy/hnKTG+3illGjvhvsqHSK4XpdpPlFW9gePX8kZBVJyR9kff+HY6VZcKp4bSI4uy7fwkfVl4QeNqFkAplz93QxG4Pb9DlGcQqf+n6+d0yoq2ps7Rf840w0UFYtRqj/WnTHjb0188JIaKtdX6Y8+F3HIbb8zupyNuwKq9dSYgJ6lVMCyq8GlB7FdLcaxXcbKChTnsrrCb29TV3CRrpaGaWoD4KM/uZs0c=
 after_deploy:
 - if [[ "${PACKAGE_NAME}" != "ANTsR" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
   != "ANTsRCore" ]]; then if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then
