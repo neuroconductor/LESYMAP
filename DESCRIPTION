@@ -23,5 +23,5 @@ RoxygenNote: 6.1.1.9000
 biocViews:
 Repository: Neuroconductor
 Remotes: 
-    neuroconductor/ANTsRCore@42b11f94d79055d54aeadb7fa9bbb1e274a8ef4d,
-    neuroconductor/ANTsR@c3aca96c989d5a48efc86834f28692da83db9f6b
+    neuroconductor/ANTsRCore@48058f759685f8cfc4a58d322f9983ef8dd3823b,
+    neuroconductor/ANTsR@d93b62ccb606ba2a5ca19416269c6188788012f3
