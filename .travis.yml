@@ -1,3 +1,21 @@
+sudo: required
+latex: false
+warnings_are_errors: false
+os:
+  - linux
+  - osx
+compiler:
+  - clang
+
+matrix:
+ allow_failures:
+   - os: osx
+   - r: devel
+   - r: 3.7
+
+
+dist: trusty
+
 language: r
 cache: packages
 warnings_are_errors: true
@@ -16,14 +34,15 @@ os:
 - osx
 osx_image: xcode9
 r:
-- 3.2
-- 3.3
-- 3.4
-- release
-- devel
-matrix:
-  allow_failures:
-  - r: devel
+  - 3.2
+  - 3.3
+  - 3.4
+  - 3.5
+  - 3.6
+  - 3.7
+  - release
+  - devel
+
 env:
   global:
   - R_BUILD_ARGS="--no-manual"
@@ -34,70 +53,24 @@ env:
   - DISPLAY=:99.0
   - R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
 before_install:
-- ulimit -n 2048
-- export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
-- export PROJ_DIR=`basename $PWD`
-- echo "travis_wait*\.log$" >> .Rbuildignore
-- fname=travis_helpers.sh
-- wget -O ${fname} http://bit.ly/travis_helpers
-- cat ${fname}; source ${fname}; rm ${fname}
-- cat DESCRIPTION
-- start_xvfb ;
-- v8_install ;
-- dcmtk_install ;
-- export rver=`r_version`; echo $rver ;
-- export PACKAGE_NAME=`package_name`
-- export RCHECK_DIR=${PACKAGE_NAME}.Rcheck
-- remove_neuroc_packages
-- export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
-- x=`export_clang_cxx`; eval ${x}
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then no_open_mp ; fi
-- echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
-- echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"
-- clang_cxx
-- export cmake_version="3.11"
-- cmake --version
-- x=`cmake_setup`; echo "${x}"; eval ${x};
-- cmake --version
-- export ants_user=neuroconductor
-- echo "Installing Missing Deps ITKR"
-- install_missing_remote_deps_all ${ants_user}/ITKR
-- gh_binary_install ${ants_user}/ITKR ;
-- if [[ "${PACKAGE_NAME}" == "ITKR" || "${PACKAGE_NAME}" == "ANTsRCore" || "${PACKAGE_NAME}"
-  == "ANTsR" ]]; then Rscript -e "install.packages(c('Rcpp', 'RcppEigen'), type =
-  'source', repo = 'http://cran.rstudio.com')" ; fi
-- if [[ "${PACKAGE_NAME}" == "ITKR" || "${PACKAGE_NAME}" == "ANTsRCore" ]]; then export
-  R_BUILD_ARGS="${R_BUILD_ARGS} --no-build-vignettes " ; export R_CHECK_ARGS="--no-vignettes
-  ${R_CHECK_ARGS}" ; fi
-- if [[ "${PACKAGE_NAME}" != "ITKR" ]]; then echo "Installing Missing Deps ANTsRCore"
-  ; install_missing_remote_deps_all ${ants_user}/ANTsRCore; gh_binary_install_passive
-  ${ants_user}/ANTsRCore ; fi
-- if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]]; then echo
-  "Installing Missing Deps ANTsR" ; install_missing_remote_deps_all ${ants_user}/ANTsR
-  ; gh_binary_install_passive ${ants_user}/ANTsR ; fi
-- if [[ "${PACKAGE_NAME}" == "ANTsR" ]]; then export _R_CHECK_FORCE_SUGGESTS_=false
-  ; fi
-- cat DESCRIPTION
-- install_remotes_no_dep
-- cat DESCRIPTION
-- echo $PATH ;
-- install_deps_no_suggests
-- install_python_requirements ;
-- R CMD javareconf ;
-- travis_run_cache
-script:
-- x=`export_clang_cxx`; eval ${x}
-- travis_wait 100 R CMD build ${R_BUILD_ARGS} .
-- rm -f travis_wait*.log
-- PKG_TARBALL=$(ls -1t *.tar.gz | head -n 1)
-- ls
-- travis_wait 100 R CMD check ${R_CHECK_ARGS} "${PKG_TARBALL}"; CHECK_RET=$? ;
-- rm -f travis_wait*.log
-- if [[ $CHECK_RET -ne 0 ]]; then echo "R CMD check failed"; check_fail; dump_logs;
-  travis_terminate 1; fi
-- check_warnings
-after_success:
-- dump_logs
+  - ulimit -n 2048
+  - export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
+  - export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
+  - wget -O antsr_travis.sh http://bit.ly/antsr_travis_sh
+  - chmod +x antsr_travis.sh
+  - . ./antsr_travis.sh
+  - rm antsr_travis.sh
+  - v8_install
+  - Rscript -e "install.packages(c('Rcpp', 'RcppEigen'), type = 'source', repos=c(CRAN='https://cran.rstudio.com'))"
+  - Rscript -e "install.packages( c('magrittr','testthat','knitr','rmarkdown','covr','devtools', 'desc',  'remotes', 'colormap' ), repos=c(CRAN='https://cran.rstudio.com'))"
+  - Rscript -e 'install.packages("rsvd")'
+  - Rscript -e 'install.packages("magic")'
+  - Rscript -e 'install.packages("ggplot2")'
+  - Rscript -e 'install.packages("psych")'
+  - Rscript -e 'install.packages("randomForest")'
+  - Rscript -e "install.packages(c('lmPerm', 'multcomp', 'nparcomp', 'RcppArmadillo', 'sandwitch', 'TH.data', 'zoo'), type = 'source', repos=c(CRAN='https://cran.rstudio.com'))"
+  - cat DESCRIPTION
+  
 after_failure:
 - dump_logs
 before_deploy:
