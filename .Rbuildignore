@@ -1,10 +1,10 @@
-^\./appveyor\.yml\.bak$
-^appveyor\.yml$
-^\./\.travis\.yml\.bak$
-^\.travis\.yml$
-^DESCRIPTION\.bak$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 \.travis\.yml$
 _config\.yml$
 LESYMAP\.pdf$
+^DESCRIPTION\.bak$
+^\.travis\.yml$
+^\./\.travis\.yml\.bak$
+^appveyor\.yml$
+^\./appveyor\.yml\.bak$
