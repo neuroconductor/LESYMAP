@@ -1,6 +1,6 @@
 language: r
-cache: packages
 warnings_are_errors: true
+cache: false
 use_bioc: true
 bioc_required: true
 cran: http://cran.rstudio.com
@@ -17,6 +17,8 @@ os:
 - linux
 - osx
 osx_image: xcode9
+services:
+- xvfb
 r:
 - 3.3
 - 3.4
@@ -35,6 +37,7 @@ env:
   - PROJECT_NAME=neuroconductor
   - DISPLAY=:99.0
   - R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
+  - _R_CHECK_FORCE_SUGGESTS_=false
 before_install:
 - ulimit -n 2048
 - export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
@@ -44,16 +47,19 @@ before_install:
 - wget -O ${fname} http://bit.ly/travis_helpers
 - cat ${fname}; source ${fname}; rm ${fname}
 - cat DESCRIPTION
-- start_xvfb ;
-- v8_install ;
-- dcmtk_install ;
+- codename=`linux_codename`;
+- if [ "${codename}" = "trusty" ]; then start_xvfb ; fi
+- jags_install || true;
+- v8_install || true;
+- dcmtk_install || true;
+- gsl_install 2.1 || true ;
 - export rver=`r_version`; echo $rver ;
 - export PACKAGE_NAME=`package_name`
 - export RCHECK_DIR=${PACKAGE_NAME}.Rcheck
 - remove_neuroc_packages
 - export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
 - x=`export_clang_cxx`; eval ${x}
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then no_open_mp ; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then no_open_mp ; brew install -v freetype ; fi
 - echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
 - echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"
 - clang_cxx
@@ -62,21 +68,21 @@ before_install:
 - x=`cmake_setup`; echo "${x}"; eval ${x};
 - cmake --version
 - export ants_user=neuroconductor
-- echo "Installing Missing Deps ITKR"
-- install_missing_remote_deps_all ${ants_user}/ITKR
-- gh_binary_install ${ants_user}/ITKR ;
 - if [[ "${PACKAGE_NAME}" == "ITKR" || "${PACKAGE_NAME}" == "ANTsRCore" || "${PACKAGE_NAME}"
   == "ANTsR" ]]; then Rscript -e "install.packages(c('Rcpp', 'RcppEigen'), type =
   'source', repo = 'http://cran.rstudio.com')" ; fi
 - if [[ "${PACKAGE_NAME}" == "ITKR" || "${PACKAGE_NAME}" == "ANTsRCore" ]]; then export
   R_BUILD_ARGS="${R_BUILD_ARGS} --no-build-vignettes " ; export R_CHECK_ARGS="--no-vignettes
   ${R_CHECK_ARGS}" ; fi
-- if [[ "${PACKAGE_NAME}" != "ITKR" ]]; then echo "Installing Missing Deps ANTsRCore"
-  ; install_missing_remote_deps_all ${ants_user}/ANTsRCore; gh_binary_install_passive
-  ${ants_user}/ANTsRCore ; fi
+- if [[ "${PACKAGE_NAME}" != "ITKR" ]]; then echo "Installing Missing Deps ITKR" ;
+  install_missing_remote_deps_all ${ants_user}/ITKR ; gh_binary_install ${ants_user}/ITKR
+  ; fi
 - if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]]; then echo
-  "Installing Missing Deps ANTsR" ; install_missing_remote_deps_all ${ants_user}/ANTsR
-  ; gh_binary_install_passive ${ants_user}/ANTsR ; fi
+  "Installing Missing Deps ANTsRCore" ; install_missing_remote_deps_all ${ants_user}/ANTsRCore;
+  gh_binary_install_passive ${ants_user}/ANTsRCore ; fi
+- if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
+  != "ANTsR" ]]; then echo "Installing Missing Deps ANTsR" ; install_missing_remote_deps_all
+  ${ants_user}/ANTsR ; gh_binary_install_passive ${ants_user}/ANTsR ; fi
 - if [[ "${PACKAGE_NAME}" == "ANTsR" ]]; then export _R_CHECK_FORCE_SUGGESTS_=false
   ; fi
 - cat DESCRIPTION
@@ -120,7 +126,7 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: BCvxlVIEjlYLfDDheuMFxaWV1T6UoG3zE3P9d7tYTd4ivwpATGkinTLi7IftrkT7Y8t+3gK2WrGxdADk+KeZiLQlgNhnftDr683sf8Ia+naYpU9zhoHPSxMHb4FcHIGjRKGtJd4v+gky1/3Cc2w7NwhAm/kOkk8S9P7cm+1j44OuRL89eJpkoiGVD5RWLMS+ScLjxk4NTRrLk0BDz/Hl5BBJus2IcoAHjI6LD7FAbESlCmz3sG1V7gWOoQSoYotPENzS78ubLOjQOc+eSsci4S6jj8QlxZrHYMlG0fYkza8kpoWX4r3iKpa353/ShhDrd0xqIads3wqIb/rZjp3STne9yTozpuW1pcUL8kNZbHQUyelXCuffEqY0k8DSGaYue1OeDXX0F5ECl6+VoFcGXk9Gv2eLoc3ZTXc5lCmVrCu+HI48EQnj6dD8hVu8ht5SOGtKoNeM4ipfMxrSooBTvw/NbO49tnpKHhx2J/ifucJ/9hdbyYu7L/UfGCgofQYIvTkpPPBTP1TNPE18HwC+LuFGDU63fV0YXF4UZg+ZEqCs73IaG1+ubBwgtZE2o3fGPg+XekpSfLK1vNiFnIPF5DSEgWMH7jQso+F4YjDg2iAjdDoPdp4LJ8fGXWN5AzkxIlQJpiQByBwM6lp765PPgw6XC0orhlEIKoIgXB7obEY=
+    secure: qcWG3B3wUXwTomS89ymVqUh2+8bofmLmhy58Xilx5AZ4i7lCxISF7DyU88GJX8h6G+RZ898mGY2Jxnq4r0yJFDHW2sVsiSR3zoDiVeS3slXQmswyt2y+o82yKQ0vlL/+dHU1Liv5zyeMzAE99GJeIJkHm+10IXvqpwd/zsRf3kbwVNEFYXPXg66hEonCu47+0ai6SU218fZZmlaq58C2MTtXooLpaaq7SemQUms/JtTdzXId8I+gkkUkVWyIAnzMHUzIA57cv/XcVfqQrvd8UJKO2QtecKuJCU2fAw9XKnS0a9la9+NVKHorpSO27smdjB5OGVk5g+yo8pPgF/8gkMiXdTyEivzXNsWRBTpTL8Zt1mJsNz2VeH1B8P2Sz/wZcxw5P/w2PGaQSFZxPH0sinw0VwsflIX7HDSkKN/o2wdh0nsigqk5x9EK7PEPFfYgCCQwmwgQ2GkQDgc47xTqt/lQEqhLEkLddiBcCVvYYp1kNX/2RgVi1KftzqBuKG1qfyzvzLOsy2tj4Xpi1Ld/AZHU7r+5QST9U9AUf1S+mWJmq0yCjz5GNYd0KTRPv/DVC1fCdqV7j0Q7Dwq0AnOqFo8dDBsIVHyqj8Z7e64cOzCOpOxEdc6ZFaAVbIohnGJGzvA7ibtRoGIBmfsc+eEnJBKAWPMwQKZYKo+cUKZq3Uc=
 after_deploy:
 - echo "${PROJECT_NAME}" | grep -q "releases"; if [[ $? -eq 0 ]]; then run_coverage="false";
   else run_coverage=; fi;
@@ -128,3 +134,5 @@ after_deploy:
   != "ANTsRCore" && -z "${run_coverage}" ]]; then if [[ "${TRAVIS_R_VERSION_STRING}"
   = "release" ]]; then Rscript -e 'covr::coveralls(type = "all", quiet = FALSE)' ;
   fi fi
+
+#neuroc.deps version (SHA): efc1681
