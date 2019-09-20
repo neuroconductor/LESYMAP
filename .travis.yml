@@ -126,13 +126,11 @@ deploy:
   on:
     tags: true
   api-key:
-    secure: qcWG3B3wUXwTomS89ymVqUh2+8bofmLmhy58Xilx5AZ4i7lCxISF7DyU88GJX8h6G+RZ898mGY2Jxnq4r0yJFDHW2sVsiSR3zoDiVeS3slXQmswyt2y+o82yKQ0vlL/+dHU1Liv5zyeMzAE99GJeIJkHm+10IXvqpwd/zsRf3kbwVNEFYXPXg66hEonCu47+0ai6SU218fZZmlaq58C2MTtXooLpaaq7SemQUms/JtTdzXId8I+gkkUkVWyIAnzMHUzIA57cv/XcVfqQrvd8UJKO2QtecKuJCU2fAw9XKnS0a9la9+NVKHorpSO27smdjB5OGVk5g+yo8pPgF/8gkMiXdTyEivzXNsWRBTpTL8Zt1mJsNz2VeH1B8P2Sz/wZcxw5P/w2PGaQSFZxPH0sinw0VwsflIX7HDSkKN/o2wdh0nsigqk5x9EK7PEPFfYgCCQwmwgQ2GkQDgc47xTqt/lQEqhLEkLddiBcCVvYYp1kNX/2RgVi1KftzqBuKG1qfyzvzLOsy2tj4Xpi1Ld/AZHU7r+5QST9U9AUf1S+mWJmq0yCjz5GNYd0KTRPv/DVC1fCdqV7j0Q7Dwq0AnOqFo8dDBsIVHyqj8Z7e64cOzCOpOxEdc6ZFaAVbIohnGJGzvA7ibtRoGIBmfsc+eEnJBKAWPMwQKZYKo+cUKZq3Uc=
+    secure: BcxQconoSbE5jR57msBiHFXPL4bk94p0CgEJPlIFEH4nnyMpbw/dNOzX48jS9ECH5xpl2rIOiDICrcN+auiHruVcsPg7RiLs9aEPdqxg+Yq0YCk0q4vGShvm3s8D1TPov9TR09k/byWQisLlMVwiOMavjduPuiJRyPgzTyDQlqVQWVFDktzWQATl55hAMgh+mjH5NTYTp1QKApB3UYoTDRyJjyuJ0d4rkUQhzWEz7vDle91+FWhkVDm/gQI8l3PyedwxFUM9m7U9vmNekRzuv3szZub6YgP6mEEF7A3awI/Yxs044ZVrrBWOkO2p3RAB9zmC4iozjGpzCVYhjvA/cXBbDYWBn7z56u79GF9yXykAzBhFfixHfwSHT3tdZgZ8ZSek2tvRWYB6toQj2mHejc50HLwHeSQxl4qoGTfhSqL2S2cTyBpxieppL4Vr8ba59RyVCs4mTQ8wr1XmyjDLd/WOQAAoAy+wwpnpqbCY3LIODGfefmI5R0hnKmxIPk83PT3b9m04tL/pJFAbmB37K2tMz7GUQHhl2Skx8WX88MSSmOxbWgrcrBbWvosJfRUN59zisbRpuAcqx5yd21fURNRcfo7y5SfbikjpdYd9yzR2AK7kOh9KDrrQBlug/yQ93tzl4Yv1pydQOvtTveydd1cN8ijlltJwUe2fjZY2Lm8=
 after_deploy:
 - echo "${PROJECT_NAME}" | grep -q "releases"; if [[ $? -eq 0 ]]; then run_coverage="false";
   else run_coverage=; fi;
-- if [[ "${PACKAGE_NAME}" != "ANTsR" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
-  != "ANTsRCore" && -z "${run_coverage}" ]]; then if [[ "${TRAVIS_R_VERSION_STRING}"
-  = "release" ]]; then Rscript -e 'covr::coveralls(type = "all", quiet = FALSE)' ;
-  fi fi
+- if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then Rscript -e 'covr::coveralls(type
+  = "all", quiet = FALSE)' ; fi
 
-#neuroc.deps version (SHA): efc1681
+#neuroc.deps version (SHA): d7c4d8f
