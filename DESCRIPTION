@@ -24,4 +24,4 @@ biocViews:
 Repository: Neuroconductor
 Remotes: 
     neuroconductor/ANTsRCore@3f638ceda3df0e8d35c7044f89bf8abb468c8502,
-    neuroconductor/ANTsR@bb8aeacac74c9969fe0693cffb82291ba192fe31
+    neuroconductor/ANTsR@c1c38af312bbd1ccda1ae9b4ea6200aef002006b
