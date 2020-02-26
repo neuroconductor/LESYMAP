@@ -38,6 +38,7 @@ env:
   - DISPLAY=:99.0
   - R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
   - _R_CHECK_FORCE_SUGGESTS_=false
+  - secure: V1YsfbTgn/eCqyKhUmykfc7uXLTQi/p8nd3BgepK+pdalrbMDjC4roWqKemfLqKx8crMkgTx1HZtcQFIqzaaBtgISAy/08h0K+z5Fq8/5tW/xBEYSevy3l3tXjqzGjsaZTbQp7AIhr7Mo146QkPDCEq9Z2vwirZXgy2wJ2nxHCLEjFOp6HFypLAz8iRLLhaxI9UJW6AmdYEbx+/V2wD59JzXOtsecIB605/RYxyUaRf2JUAoqqikiT/9ostLAYTcSs5S8MGbyTKc3A0hbQHabCRq8O5zxTRbc/mY5HAj5Qq1MUKoJlTkG3fiYvyFGIZZVo2c7jpH4gQZOwJiS+LLUNQukqtQs8b+sBmbW88Ga8yK0OfXKl6NaGOY60m/yky3CfQ41n64oX/ex5aBI+a6dK6gN2wkp5QgzGBKbT+cO0DRdtXfOHj7fSLc4P3lbo5xmWwEfrcV4FTwSQsCTp+Ofxz4X8cOQ/2fYgEStkLd0ua/ik39fKFeDz9hbyCfHusHNzooUYDQCKT14bkabGKC/83dtj5Qk+Bg2XfRAwg6gcv01KT1r/mKWT7iDlIylmmqP/Jjf4aDwa8JMOCL0Y5ezdauFiXuNUNl25c07Xwh/kBsRrAz5Tvvrm4Sc0F+8otcihOZvbkSwl4pjxlUycy8a9goOLQ4eZVtWj2T7trE6ss=
 before_install:
 - ulimit -n 2048
 - export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
@@ -132,5 +133,3 @@ after_deploy:
   else run_coverage=; fi;
 - if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then Rscript -e 'covr::coveralls(type
   = "all", quiet = FALSE)' ; fi
-
-#neuroc.deps version (SHA): a5aa5ca
