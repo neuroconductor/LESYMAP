@@ -1,7 +1,6 @@
 language: r
-warnings_are_errors: true
+warnings_are_errors: false
 cache: false
-use_bioc: true
 bioc_required: true
 cran: http://cran.rstudio.com
 dist: trusty
@@ -12,22 +11,12 @@ addons:
     - libxml2-dev
     - libfftw3-dev
     - libgsl0-dev
-    - libgsl0ldbl
-os:
-- linux
-- osx
-osx_image: xcode9.4
-services:
-- xvfb
-r:
-- 3.3
-- 3.4
-- 3.5
-- release
-- devel
-matrix:
-  allow_failures:
-  - r: devel
+    - mesa-common-dev
+    - libglu1-mesa-dev
+    - devscripts
+os: linux
+services: xvfb
+r: release
 env:
   global:
   - R_BUILD_ARGS="--no-manual"
@@ -38,8 +27,9 @@ env:
   - DISPLAY=:99.0
   - R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
   - _R_CHECK_FORCE_SUGGESTS_=false
-  - secure: V1YsfbTgn/eCqyKhUmykfc7uXLTQi/p8nd3BgepK+pdalrbMDjC4roWqKemfLqKx8crMkgTx1HZtcQFIqzaaBtgISAy/08h0K+z5Fq8/5tW/xBEYSevy3l3tXjqzGjsaZTbQp7AIhr7Mo146QkPDCEq9Z2vwirZXgy2wJ2nxHCLEjFOp6HFypLAz8iRLLhaxI9UJW6AmdYEbx+/V2wD59JzXOtsecIB605/RYxyUaRf2JUAoqqikiT/9ostLAYTcSs5S8MGbyTKc3A0hbQHabCRq8O5zxTRbc/mY5HAj5Qq1MUKoJlTkG3fiYvyFGIZZVo2c7jpH4gQZOwJiS+LLUNQukqtQs8b+sBmbW88Ga8yK0OfXKl6NaGOY60m/yky3CfQ41n64oX/ex5aBI+a6dK6gN2wkp5QgzGBKbT+cO0DRdtXfOHj7fSLc4P3lbo5xmWwEfrcV4FTwSQsCTp+Ofxz4X8cOQ/2fYgEStkLd0ua/ik39fKFeDz9hbyCfHusHNzooUYDQCKT14bkabGKC/83dtj5Qk+Bg2XfRAwg6gcv01KT1r/mKWT7iDlIylmmqP/Jjf4aDwa8JMOCL0Y5ezdauFiXuNUNl25c07Xwh/kBsRrAz5Tvvrm4Sc0F+8otcihOZvbkSwl4pjxlUycy8a9goOLQ4eZVtWj2T7trE6ss=
+  - secure: FusTwRYUgv6qrRzhioz/WyXZat8/Enfx8M4n0RRxlBUlBM9jL4eOT5/uebLpRv+imgPgHKfPUaugqnSuwFYhWpI1jNbCi2jQsmKYJu/jOhxpY6wrr2ll73TyRNI1Jmq2vKfcSti9GrpIK4iD2/P8QDsTSBqsZD7m0IlQEm8N7oya6z52xnMINvNiZWa94fRuz6PTb20JiQBFEJ9LYSPpDLtaFqRzD9cIb8T1T4kwKehpkFMfLCNBhrAES+ByhIk/zqUOw2OixzVbMby6gR6QqmBmt945YwOGscDk0nYZM2qXn8VxBFREDBO/iUeEuEaZF6Z/5H/ir21elRtZNDQn6Io3H1iGu21Go4u/51g2wXNiYBjbQ2sz9MUJpPRktGDT8Biz1CfC89CuSmOQORTVxf0s/dyRy8K0EIDXd4+QJ002bTA1xswRbwgZLkHoC6Tv05XtSBKCRZ9AJMxXzzBVTm5pBPtp0ykZ7lo/543bps42oNqvpTywQlUfhi2blefuKdAxiZtuI62QugoFxd9y5WpjqgJbjuK+LA4QpReIdiPX3KZhVkncHuqUQEXw300WRpi5qghlWoKxrMHHgdhLjqSQrBUvBD6DJd8bYAWa41tIO9xIGjXk8A05XZjVNaZLH/aNzt0Q5lxwDKRrLBMrgH5WFI+WaUSnXteXvJTqZWU=
 before_install:
+- if [ "$TRAVIS_DIST" = "trusty" ]; then sudo apt-get -y install libgsl0ldbl ; fi
 - ulimit -n 2048
 - export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
 - export PROJ_DIR=`basename $PWD`
@@ -48,10 +38,9 @@ before_install:
 - wget -O ${fname} http://bit.ly/travis_helpers
 - cat ${fname}; source ${fname}; rm ${fname}
 - cat DESCRIPTION
-- codename=`linux_codename`;
-- if [ "${codename}" = "trusty" ]; then start_xvfb ; fi
+- start_xvfb ;
 - jags_install || true;
-- v8_install || true;
+- if `need_v8`; then v8_install || true; fi
 - dcmtk_install || true;
 - gsl_install 2.1 || true ;
 - export rver=`r_version`; echo $rver ;
@@ -60,7 +49,6 @@ before_install:
 - remove_neuroc_packages
 - export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
 - x=`export_clang_cxx`; eval ${x}
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then no_open_mp ; brew install -v freetype ; fi
 - echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
 - echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"
 - clang_cxx
@@ -95,41 +83,14 @@ before_install:
 - R CMD javareconf ;
 - travis_run_cache
 script:
-- x=`export_clang_cxx`; eval ${x}
-- travis_wait 100 R CMD build ${R_BUILD_ARGS} .
-- rm -f travis_wait*.log
-- PKG_TARBALL=$(ls -1t *.tar.gz | head -n 1)
-- ls
-- travis_wait 100 R CMD check ${R_CHECK_ARGS} "${PKG_TARBALL}"; CHECK_RET=$? ;
-- rm -f travis_wait*.log
-- if [[ $CHECK_RET -ne 0 ]]; then echo "R CMD check failed"; check_fail; dump_logs;
-  travis_terminate 1; fi
-- check_warnings
-after_success:
-- dump_logs
-after_failure:
-- dump_logs
-before_deploy:
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then PKG_TARBALL=$(ls -1t *.tgz | head -n 1);
-  PKG_TARBALL_WITH_R=`echo $PKG_TARBALL | sed 's/.tgz/_'"R${rver}"'.tgz/'` ; mv ${PKG_TARBALL}
-  ${PKG_TARBALL_WITH_R} ; echo "Built tarball is ${PKG_TARBALL_WITH_R}" ; fi
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then PKG_TARBALL=$(ls -1t *.tar.gz | head -n
-  1); PKG_TARBALL_WITH_R=`echo $PKG_TARBALL | sed 's/.tar.gz/_'"R${rver}"'.tar.gz/'`
-  ; mv ${PKG_TARBALL} ${PKG_TARBALL_WITH_R} ; echo "Built tarball is ${PKG_TARBALL_WITH_R}"
-  ; fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then rm -f *.tar.gz; fi
+- Rscript -e 'install.packages("remotes")'
+- Rscript -e 'remotes::install_github("hadley/pkgdown")'
+- travis_wait 100 Rscript -e 'pkgdown::build_site()'
 deploy:
-  provider: releases
+  provider: pages
   skip_cleanup: true
-  file_glob: true
-  overwrite: true
-  file: "${PACKAGE_NAME}*.t*gz"
+  keep_history: true
+  local_dir: docs
   on:
-    tags: true
-  api-key:
-    secure: pUgIU8Hjo49xKfTOOj1cfrr31J37k4kSqO8YwUlC4HVzRpEmHpHXHPrc170RrA+9sgmAvY/+NMxkQgBU9EnjV+kahyW4A/Q9N8gSrQqK9yTa4XqxLWbfFENWrLUMq9+WWqLNbV+7SJJ8YzzTm22uK20La8zgxoU4gvESIJfuXQHTztjwbUAVhPEaUrAEYr+qs2wkD6B9Qg7htk6tjsw8ugeoZDF61qioSyUShuv8LhqycnQALw+AePURu4J+SObdPDDzd7RjXwwWNKmhWJe1x7oSdEVLIo8Wur7+vZBDwQlML6gg24w+2mM2vecIBqa4uBtExUOAzD0QsiKzY14qur4Odt6Y7zDK1HkZT7pK5+FTvj2jMMUJQxgHyTgC7W8CJHXZD6kPGldjFO3bZ0CSX1NrliZy0WVHA3zTKUK3am7JqgiCjEFM4XsMrbKizErfK7bwYqNnBp6AmzUT21vSK2fLdwZP6XCUM3dAsCll7iPkUs8rWQHtkQe17FZYHodX9S7WdRbja+pb0Dgel6r1eoTpznnb0sbibxFBYEPj80BSpAQHOluvvWM3PfUBT7Ay3yl1E+JMU1VOF/eJ0Wgij8rimGnOPaNW7Pqps7HutP9cy++F/Uk8MSfGw37dMGrfKsKV98vlJm3Ly2LELv3Z2/BIKDZ8WKMqS/c0DOW0SB8=
-after_deploy:
-- echo "${PROJECT_NAME}" | grep -q "releases"; if [[ $? -eq 0 ]]; then run_coverage="false";
-  else run_coverage=; fi;
-- if [[ "${TRAVIS_R_VERSION_STRING}" = "release" ]]; then Rscript -e 'covr::coveralls(type
-  = "all", quiet = FALSE)' ; fi
+    branch: master
+  token: "$GITHUB_TOKEN"
