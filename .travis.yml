@@ -1,96 +1,98 @@
 language: r
-warnings_are_errors: false
-cache: false
-bioc_required: true
+warnings_are_errors: no
+cache: no
+bioc_required: yes
 cran: http://cran.rstudio.com
-dist: trusty
+dist: xenial
 addons:
   apt:
     packages:
-    - libcurl4-openssl-dev
-    - libxml2-dev
-    - libfftw3-dev
-    - libgsl0-dev
-    - mesa-common-dev
-    - libglu1-mesa-dev
-    - devscripts
+      - libcurl4-openssl-dev
+      - libxml2-dev
+      - libfftw3-dev
+      - libgsl0-dev
+      - mesa-common-dev
+      - libglu1-mesa-dev
+      - devscripts
 os: linux
 services: xvfb
 r: release
 env:
   global:
-  - R_BUILD_ARGS="--no-manual"
-  - R_CHECK_ARGS="--as-cran --install-args=--build"
-  - RGL_USE_NULL=TRUE
-  - WARNINGS_ARE_ERRORS=1
-  - PROJECT_NAME=neuroconductor
-  - DISPLAY=:99.0
-  - R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
-  - _R_CHECK_FORCE_SUGGESTS_=false
-  - secure: FusTwRYUgv6qrRzhioz/WyXZat8/Enfx8M4n0RRxlBUlBM9jL4eOT5/uebLpRv+imgPgHKfPUaugqnSuwFYhWpI1jNbCi2jQsmKYJu/jOhxpY6wrr2ll73TyRNI1Jmq2vKfcSti9GrpIK4iD2/P8QDsTSBqsZD7m0IlQEm8N7oya6z52xnMINvNiZWa94fRuz6PTb20JiQBFEJ9LYSPpDLtaFqRzD9cIb8T1T4kwKehpkFMfLCNBhrAES+ByhIk/zqUOw2OixzVbMby6gR6QqmBmt945YwOGscDk0nYZM2qXn8VxBFREDBO/iUeEuEaZF6Z/5H/ir21elRtZNDQn6Io3H1iGu21Go4u/51g2wXNiYBjbQ2sz9MUJpPRktGDT8Biz1CfC89CuSmOQORTVxf0s/dyRy8K0EIDXd4+QJ002bTA1xswRbwgZLkHoC6Tv05XtSBKCRZ9AJMxXzzBVTm5pBPtp0ykZ7lo/543bps42oNqvpTywQlUfhi2blefuKdAxiZtuI62QugoFxd9y5WpjqgJbjuK+LA4QpReIdiPX3KZhVkncHuqUQEXw300WRpi5qghlWoKxrMHHgdhLjqSQrBUvBD6DJd8bYAWa41tIO9xIGjXk8A05XZjVNaZLH/aNzt0Q5lxwDKRrLBMrgH5WFI+WaUSnXteXvJTqZWU=
+    - R_BUILD_ARGS="--no-manual"
+    - R_CHECK_ARGS="--as-cran --install-args=--build"
+    - RGL_USE_NULL=TRUE
+    - WARNINGS_ARE_ERRORS=1
+    - PROJECT_NAME=neuroconductor
+    - DISPLAY=:99.0
+    - R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
+    - _R_CHECK_FORCE_SUGGESTS_=false
 before_install:
-- if [ "$TRAVIS_DIST" = "trusty" ]; then sudo apt-get -y install libgsl0ldbl ; fi
-- ulimit -n 2048
-- export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
-- export PROJ_DIR=`basename $PWD`
-- echo "travis_wait*\.log$" >> .Rbuildignore
-- fname=travis_helpers.sh
-- wget -O ${fname} http://bit.ly/travis_helpers
-- cat ${fname}; source ${fname}; rm ${fname}
-- cat DESCRIPTION
-- start_xvfb ;
-- jags_install || true;
-- if `need_v8`; then v8_install || true; fi
-- dcmtk_install || true;
-- gsl_install 2.1 || true ;
-- export rver=`r_version`; echo $rver ;
-- export PACKAGE_NAME=`package_name`
-- export RCHECK_DIR=${PACKAGE_NAME}.Rcheck
-- remove_neuroc_packages
-- export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
-- x=`export_clang_cxx`; eval ${x}
-- echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
-- echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"
-- clang_cxx
-- export cmake_version="3.11"
-- cmake --version
-- x=`cmake_setup`; echo "${x}"; eval ${x};
-- cmake --version
-- export ants_user=neuroconductor
-- if [[ "${PACKAGE_NAME}" == "ITKR" || "${PACKAGE_NAME}" == "ANTsRCore" || "${PACKAGE_NAME}"
-  == "ANTsR" ]]; then Rscript -e "install.packages(c('Rcpp', 'RcppEigen'), type =
-  'source', repo = 'http://cran.rstudio.com')" ; fi
-- if [[ "${PACKAGE_NAME}" == "ITKR" || "${PACKAGE_NAME}" == "ANTsRCore" ]]; then export
-  R_BUILD_ARGS="${R_BUILD_ARGS} --no-build-vignettes " ; export R_CHECK_ARGS="--no-vignettes
-  ${R_CHECK_ARGS}" ; fi
-- if [[ "${PACKAGE_NAME}" != "ITKR" ]]; then echo "Installing Missing Deps ITKR" ;
-  install_missing_remote_deps_all ${ants_user}/ITKR ; gh_binary_install ${ants_user}/ITKR
-  ; fi
-- if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]]; then echo
-  "Installing Missing Deps ANTsRCore" ; install_missing_remote_deps_all ${ants_user}/ANTsRCore;
-  gh_binary_install_passive ${ants_user}/ANTsRCore ; fi
-- if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
-  != "ANTsR" ]]; then echo "Installing Missing Deps ANTsR" ; install_missing_remote_deps_all
-  ${ants_user}/ANTsR ; gh_binary_install_passive ${ants_user}/ANTsR ; fi
-- if [[ "${PACKAGE_NAME}" == "ANTsR" ]]; then export _R_CHECK_FORCE_SUGGESTS_=false
-  ; fi
-- cat DESCRIPTION
-- install_remotes_no_dep
-- cat DESCRIPTION
-- echo $PATH ;
-- install_deps_no_suggests
-- install_python_requirements ;
-- R CMD javareconf ;
-- travis_run_cache
+  - if [ "$TRAVIS_DIST" = "trusty" ]; then sudo apt-get -y install libgsl0ldbl ; fi
+  - ulimit -n 2048
+  - export LD_LIBRARY_PATH=/usr/local/clang/lib:${LD_LIBRARY_PATH}
+  - export PROJ_DIR=`basename $PWD`
+  - echo "travis_wait*\.log$" >> .Rbuildignore
+  - fname=travis_helpers.sh
+  - wget -O ${fname} http://bit.ly/travis_helpers
+  - cat ${fname}; source ${fname}; rm ${fname}
+  - cat DESCRIPTION
+  - start_xvfb ;
+  - jags_install || true;
+  - if `need_v8`; then v8_install || true; fi
+  - dcmtk_install || true;
+  - gsl_install 2.1 || true ;
+  - export rver=`r_version`; echo $rver ;
+  - export PACKAGE_NAME=`package_name`
+  - export RCHECK_DIR=${PACKAGE_NAME}.Rcheck
+  - remove_neuroc_packages
+  - export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
+  - x=`export_clang_cxx`; eval ${x}
+  - echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
+  - echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"
+  - clang_cxx
+  - export cmake_version="3.11"
+  - cmake --version
+  - x=`cmake_setup`; echo "${x}"; eval ${x};
+  - cmake --version
+  - export ants_user=neuroconductor
+  - if [[ "${PACKAGE_NAME}" == "ITKR" || "${PACKAGE_NAME}" == "ANTsRCore" || "${PACKAGE_NAME}"
+    == "ANTsR" ]]; then Rscript -e "install.packages(c('Rcpp', 'RcppEigen'), type
+    = 'source', repo = 'http://cran.rstudio.com')" ; fi
+  - if [[ "${PACKAGE_NAME}" == "ITKR" || "${PACKAGE_NAME}" == "ANTsRCore" ]]; then
+    export R_BUILD_ARGS="${R_BUILD_ARGS} --no-build-vignettes " ; export R_CHECK_ARGS="--no-vignettes
+    ${R_CHECK_ARGS}" ; fi
+  - if [[ "${PACKAGE_NAME}" != "ITKR" ]]; then echo "Installing Missing Deps ITKR"
+    ; install_missing_remote_deps_all ${ants_user}/ITKR ; gh_binary_install ${ants_user}/ITKR
+    ; fi
+  - if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]]; then
+    echo "Installing Missing Deps ANTsRCore" ; install_missing_remote_deps_all ${ants_user}/ANTsRCore;
+    gh_binary_install_passive ${ants_user}/ANTsRCore ; fi
+  - if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" && "${PACKAGE_NAME}"
+    != "ANTsR" ]]; then echo "Installing Missing Deps ANTsR" ; install_missing_remote_deps_all
+    ${ants_user}/ANTsR ; gh_binary_install_passive ${ants_user}/ANTsR ; fi
+  - if [[ "${PACKAGE_NAME}" == "ANTsR" ]]; then export _R_CHECK_FORCE_SUGGESTS_=false
+    ; fi
+  - cat DESCRIPTION
+  - install_remotes_no_dep
+  - cat DESCRIPTION
+  - echo $PATH ;
+  - install_deps_no_suggests
+  - install_python_requirements ;
+  - R CMD javareconf ;
+  - travis_run_cache
 script:
-- Rscript -e 'install.packages("remotes")'
-- Rscript -e 'remotes::install_github("hadley/pkgdown")'
-- travis_wait 100 Rscript -e 'pkgdown::build_site()'
+  - Rscript -e 'install.packages("remotes")'
+  - Rscript -e 'remotes::install_github("hadley/pkgdown")'
+  - travis_wait 100 Rscript -e 'pkgdown::clean_site()'
+  - travis_wait 100 Rscript -e 'pkgdown::build_site()'
 deploy:
   provider: pages
-  skip_cleanup: true
-  keep_history: true
+  skip_cleanup: yes
+  keep_history: yes
   local_dir: docs
-  on:
+  'on':
     branch: master
-  token: "$GITHUB_TOKEN"
+  token: $GITHUB_TOKEN
+
+# neuroc.deps commit id:d4f3864
