@@ -17,16 +17,20 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
+
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -70,7 +74,7 @@ vector regression (method='svr')." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -423,21 +427,20 @@ some examples:</p>
 <span class='no'>behavior</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.glob.html'>Sys.glob</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>lesydata</span>, <span class='st'>'behavior'</span>, <span class='st'>'behavior.txt'</span>))
 <span class='no'>template</span> <span class='kw'>=</span> <span class='fu'>antsImageRead</span>(
  <span class='fu'><a href='https://rdrr.io/r/base/Sys.glob.html'>Sys.glob</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>lesydata</span>, <span class='st'>'template'</span>, <span class='st'>'ch2.nii.gz'</span>)))
-<span class='no'>lsm</span> <span class='kw'>=</span> <span class='fu'>lesymap</span>(<span class='no'>filenames</span>, <span class='no'>behavior</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>'BMfast'</span>)</div><div class='output co'>#&gt; 20:09:18 Running LESYMAP 0.0.0.9221
-#&gt; 20:09:18 Checking a few things...
-#&gt; 20:09:18 Loading behavioral data... 131 scores found.
-#&gt; 20:09:19 Filenames as input, checking lesion values on 1st image...
-#&gt; 20:09:19 Searching voxels lesioned in &gt;= 10% subjects...================================================================================
-#&gt;  326828 found
-#&gt; 20:09:51 Computing unique patches...
-#&gt; 20:10:08 Found 195102 patches in 326828 voxels - 1.7 times more voxels
-#&gt; 20:10:08 Using existing lesion matrix...  131x195102
-#&gt; 20:10:08 Checking matrix values are binary 0/1...
-#&gt; 20:10:09 Running analysis: BMfast ... 
-#&gt; 20:10:11 Correcting p-values: fdr ...
-#&gt; 20:10:11 Preparing images...
-#&gt; 20:10:12 Logging call details...
-#&gt; 20:10:12 Done! 53 secs</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>template</span>, <span class='no'>lsm</span>$<span class='no'>stat.img</span>, <span class='kw'>window.overlay</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/range.html'>range</a></span>(<span class='no'>lsm</span>$<span class='no'>stat.img</span>))</div><div class='img'><img src='lesymap-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; NULL</div><div class='input'>
+<span class='no'>lsm</span> <span class='kw'>=</span> <span class='fu'>lesymap</span>(<span class='no'>filenames</span>, <span class='no'>behavior</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>'BMfast'</span>)</div><div class='output co'>#&gt; 10:03:19 Running LESYMAP 0.0.0.9221
+#&gt; 10:03:19 Checking a few things...
+#&gt; 10:03:19 Loading behavioral data... 131 scores found.
+#&gt; 10:03:19 Filenames as input, checking lesion values on 1st image...
+#&gt; 10:03:19 Searching voxels lesioned in &gt;= 10% subjects... 326828 found
+#&gt; 10:03:52 Computing unique patches...
+#&gt; 10:04:09 Found 195102 patches in 326828 voxels - 1.7 times more voxels
+#&gt; 10:04:09 Using existing lesion matrix...  131x195102
+#&gt; 10:04:09 Checking matrix values are binary 0/1...
+#&gt; 10:04:09 Running analysis: BMfast ... 
+#&gt; 10:04:12 Correcting p-values: fdr ...
+#&gt; 10:04:12 Preparing images...
+#&gt; 10:04:12 Logging call details...
+#&gt; 10:04:12 Done! 53.4 secs</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>template</span>, <span class='no'>lsm</span>$<span class='no'>stat.img</span>, <span class='kw'>window.overlay</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/range.html'>range</a></span>(<span class='no'>lsm</span>$<span class='no'>stat.img</span>))</div><div class='img'><img src='lesymap-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; NULL</div><div class='input'>
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># Same analysis with SCCAN</span>
 <span class='no'>lsm</span> <span class='kw'>=</span> <span class='fu'>lesymap</span>(<span class='no'>filenames</span>, <span class='no'>behavior</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>'sccan'</span>,
@@ -447,16 +450,9 @@ some examples:</p>
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Dorian Pustina</p>
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -467,7 +463,7 @@ some examples:</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
 </div>
 
       </footer>
