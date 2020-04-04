@@ -4,7 +4,6 @@
 # Download script file from GitHub
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"    
-  - rm -f travis-tool.sh
   - ps: |
         $ErrorActionPreference = "Stop"
         Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
@@ -16,9 +15,10 @@ environment:
   global:
     USE_RTOOLS: true
     # R_CHECK_INSTALL_ARGS: "--install-args=--build --no-multiarch "
-    R_CHECK_ARGS: "--no-multiarch --no-manual "
+    R_CHECK_ARGS: "--as-cran --no-multiarch --no-manual "
     R_REMOTES_NO_ERRORS_FROM_WARNINGS: true        
     WARNINGS_ARE_ERRORS: 1
+    _R_CHECK_FORCE_SUGGESTS_: false
     PYTHON_VERSION: 3.6
     MINICONDA: C:\Miniconda3-x64
     R_ARCH: x64
@@ -42,6 +42,8 @@ environment:
       R_VER: 3.3
 
 install:
+  - rm -rf .Rprofile  
+  - rm -f travis-tool.sh
   - ps: Bootstrap
   - ps: (new-object net.webclient).DownloadFile('https://github.com/muschellij2/neuroc_dependencies/raw/master/JAGS-4.2.0-Rtools33.exe', 'C:\projects\JAGS-4.2.0.exe')
   - cmd: C:\projects\JAGS-4.2.0.exe /S
@@ -106,7 +108,7 @@ build_script:
 test_script:
   - travis-tool.sh run_tests
   - ls
-  - cp -ravTf C:/run %APPVEYOR_BUILD_FOLDER%
+  - cp -ravTf C:/run %APPVEYOR_BUILD_FOLDER%  & exit 0
   - cd %APPVEYOR_BUILD_FOLDER%
   - ls
   - for %%i in (*.zip) do echo %%~ni> zip_filename.txt
@@ -150,4 +152,4 @@ deploy:
   on:
     appveyor_repo_tag: true
 
-# neuroc.deps commit id:a5aa5ca
+# neuroc.deps commit id:d4f3864
