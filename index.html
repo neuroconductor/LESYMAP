@@ -77,7 +77,7 @@ Version: 0.0.0.9221<br>
 Systems: Linux, Mac or <a href="https://github.com/stnava/ANTsR/wiki/Installing-ANTsR-in-Windows-10-(along-with-FSL,-Rstudio,-Freesurfer,-etc).">Windows Linux Subsystem</a><br>
 Language: R (version 3.0 or above)<br>
 License: Apache License 2.0</p>
-<p><a href="https://travis-ci.org/dorianps/LESYMAP"><img src="https://travis-ci.org/dorianps/LESYMAP.svg?branch=master" alt="Travis"></a> <a href="https://www.codacy.com/manual/dorianps/LESYMAP?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dorianps/LESYMAP&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/774904ddb8ac4ea5b93a525b697f31f0" alt="Codacy Badge"></a> <a href="https://doi.org/10.5281/zenodo.1452007"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1452007.svg" alt="DOI"></a> <a href=""><img src="https://img.shields.io/badge/RRID-SCR__017967-blue.svg" alt="RRID badge"></a></p>
+<p><a href="https://travis-ci.org/dorianps/LESYMAP"><img src="https://travis-ci.org/dorianps/LESYMAP.svg?branch=master" alt="Travis"></a> <a href="https://www.codacy.com/manual/dorianps/LESYMAP?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dorianps/LESYMAP&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/774904ddb8ac4ea5b93a525b697f31f0" alt="Codacy Badge"></a> <a href="https://doi.org/10.5281/zenodo.1452007"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1452007.svg" alt="DOI"></a> <a href="#"><img src="https://img.shields.io/badge/RRID-SCR__017967-blue.svg" alt="RRID badge"></a></p>
 <hr>
 </div>
 <div id="what-does-it-do" class="section level2">
@@ -92,7 +92,14 @@ License: Apache License 2.0</p>
 <p>The quickest way to install is:</p>
 <pre><code>if (! 'devtools' %in% installed.packages()) install.packages('devtools')
 devtools::install_github('dorianps/LESYMAP')</code></pre>
-<p>This will install all the dependencies, including ANTsR (may take one hour on some computers). Here is the <a href="https://youtu.be/HSK2txFvbMU">video</a> of the installation process. If it doesnât work, check out the more detailed <a href="https://github.com/dorianps/LESYMAP/wiki/Lesymap-Installation">installation instructions</a>.</p>
+<p>This will install all the dependencies, including ANTsR (may take one hour on some computers). Here is the <a href="https://youtu.be/HSK2txFvbMU">video</a> of the installation process. If it doesn’t work, check out the more detailed <a href="https://github.com/dorianps/LESYMAP/wiki/Lesymap-Installation">installation instructions</a>.</p>
+</div>
+<div id="docker-container" class="section level2">
+<h2 class="hasAnchor">
+<a href="#docker-container" class="anchor"></a>Docker container</h2>
+<p>You can get LESYMAP pre-installed in a docker container (along with RStudio), no need to install anything if you have Docker.<br>
+We have built scripts for one-click start and stop of containers (Windows/Linux/Mac):<br><a href="https://github.com/dorianps/docker" class="uri">https://github.com/dorianps/docker</a><br>
+The list of current and past container builds is <a href="https://hub.docker.com/r/dorianps/lesymap/tags">here</a></p>
 <hr>
 </div>
 <div id="test-the-installation" class="section level2">
@@ -166,7 +173,7 @@ Hit &lt;Return&gt; to see next plot: </code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
