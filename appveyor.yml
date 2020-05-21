@@ -17,7 +17,6 @@ environment:
     # R_CHECK_INSTALL_ARGS: "--install-args=--build --no-multiarch "
     R_CHECK_ARGS: "--as-cran --no-multiarch --no-manual "
     R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-    _R_CHECK_FORCE_SUGGESTS_: 0
     WARNINGS_ARE_ERRORS: 1
     _R_CHECK_FORCE_SUGGESTS_: false
     PYTHON_VERSION: 3.6
@@ -155,4 +154,4 @@ deploy:
   on:
     appveyor_repo_tag: true
 
-# neuroc.deps commit id:6583632
+# neuroc.deps commit id:05ab4c3
